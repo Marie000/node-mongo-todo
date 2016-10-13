@@ -1,4 +1,6 @@
-const MongoClient = require('mongodb').MongoClient;
+//const MongoClient = require('mongodb').MongoClient;
+
+const {MongoClient, ObjectId} = require('mongodb');
 
 MongoClient.connect('mongodb://localhost:27017/TodoApp', (err,db) => {
   if(err){return console.log('unable to connect to MongoDB server')}
@@ -16,17 +18,17 @@ db.collection('Todos').insertOne({
 } )
 */
 
-db.collection('Todos').find({'completed':false}).toArray()
-  .then(function(docs){
-    console.log(JSON.stringify(docs,undefined,2))
-  }, function(err){
-    console.log('unable to fetch todos',err)
-  });
-
-db.collection('Todos').find().count()
-  .then(function(count){
-    console.log('there are '+count+ ' items in your todos collection')
-  })
+db.collection('Todos').findOneAndUpdate({
+  _id: new ObjectId('57fe9651ee869736c75f8ab5')
+}, {
+  $set:{completed: true}
+},
+  {
+    returnOriginal: false
+  }
+).then(function(result){
+  console.log(result)
+})
 
 //db.close();
 })
